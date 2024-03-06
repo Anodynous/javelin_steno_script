@@ -521,12 +521,14 @@ func handleRelease(qwertyKey, stenoKey, symbolsKey, functionKey, navKey) {
   }
 }
 
-func onPress0() { handlePress(SC_TAB, SK_NONE, SC_GRAVE, SC_NONE, SC_NONE); 
+func onPress0() { handlePress(SC_NONE, SK_NONE, SC_GRAVE, SC_NONE, SC_NONE); 
     if (layer & STENO_MASK) {
       sendText(console("get_parameter stroke_count"));
+    } else if (layer == 0) {
+      tapScanCode(SC_TAB);
     }
 }
-func onRelease0() { handleRelease(SC_TAB, SK_NONE, SC_GRAVE, SC_NONE, SC_NONE); }
+func onRelease0() { handleRelease(SC_NONE, SK_NONE, SC_GRAVE, SC_NONE, SC_NONE); }
 
 func onPress1() { handlePress(SC_Q, SK_NUM1, SC_1, SC_F9, SC_NONE); }
 func onRelease1() { handleRelease(SC_Q, SK_NUM1, SC_1, SC_F9, SC_NONE); }
