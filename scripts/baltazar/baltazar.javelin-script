@@ -8,12 +8,14 @@
 //      0    1   2   3   4   5      |       6   7   8   9   10  11
 //      12  13  14  15  16  17      |       18  19  20  21  22  23
 //      24  25  26  27  28  29      |       30  31  32  33  34  35
+//
 //              36  37  38  39      |       40  41  42  43
 //
 //
 //      44  45  46  47  48          |           49  50  51  52  53
 //
-// handlePress(QWERTY, STENO, SYMBOL, FUNCTION, NAV)
+// -----------------------------------------------------------------------------------------------------------------------------
+// Layer Order: handlePress(QWERTY, STENO, SYMBOL, FUNCTION, NAV)  | (0,1,2,4,8)
 // -----------------------------------------------------------------------------------------------------------------------------
 // QWERTY = 0
 //
@@ -41,7 +43,7 @@
 // |--------+------+------+------+------+-------|                              |-------+------+------+------+------+--------|
 // |Shft/Esc|  S1  |   K  |   W  |   R  |  *3   |                              |  *4   |   R  |   B  |   G  |   T  |    D   |
 // |--------+------+------+------+------+-------'                              '-------+------+------+------+------+--------'
-// |SupFrst |  S2  |                                                                                        |   S  |    Z   |
+// |SupSpace|  S2  |                                                                                        |   S  |    Z   |
 // `---------------'                                                                                        '---------------'
 //                         ,------+------+------+------.               ,------+------+------+------.  
 //                        |QWERTY |   #  |   A  |   O   |              |   E  |   U  |  #  |  Win  | 
@@ -60,7 +62,7 @@
 // |--------+-------+------+------+------+-------|                              |-------+------+------+------+-------+-------|
 // |   Esc  |   !   |  @   |   +  |  {   |  }    |                              |   [   |  ]   |  <   |   >  |   ?   |   |   |
 // |--------+-------+------+------+------+-------'                              '-------+------+------+------+-------+-------'
-// |  Ctrl  |   ~   |                                                                                        |   \   |   *   |
+// |   ^    |   ~   |                                                                                        |   \   |   *   |
 // `----------------'                                                                                        '---------------'
 //                         ,------+------+------+------.               ,-----+------+------+------.  
 //                        |       | Alt  |BckSpc|  SYM |              |  NAV |      | AltGr| Win  | 
@@ -68,7 +70,7 @@
 //                               [ ] [ ] [ ] [ ] [ ]                       [ ] [ ] [ ] [ ] [ ]
 // 
 // -----------------------------------------------------------------------------------------------------------------------------
-// NAV = 8
+// NAV = 8   
 //
 //                  ,----------------------------.                               ,---------------------------.
 //                  |  F1  |  F2  |  F3  |  F4   |                              | VolUp |BckSpc|Insert| Del  |
@@ -625,15 +627,25 @@ if (layer == 8){
 }}
 func onRelease23() { handleRelease(SC_APOSTROPHE, SK_DR, SC_BACKSLASH_PIPE | SYM_ALTGR, SC_NONE, SC_NONE); }
 
-func onPress24() { handlePress(SC_L_CTRL, SK_NONE, SC_L_CTRL, SC_NONE, SC_L_CTRL); 
-if (layer == 1){
-    pressStenoKey(SK_S2)
-    pressStenoKey(SK_TL)
-    pressStenoKey(SK_PL)
-    pressStenoKey(SK_HL)
-    releaseAll()
+func onPress24() { handlePress(SC_L_CTRL, SK_NONE, SK_NONE, SC_NONE, SC_L_CTRL); 
+if (layer == 1){ // Sends stroke 'STPH' to suppress first space
+    pressStenoKey(SK_S2);
+    pressStenoKey(SK_TL);
+    pressStenoKey(SK_PL);
+    pressStenoKey(SK_HL);
+    releaseStenoKey(SK_S2);
+    releaseStenoKey(SK_TL);
+    releaseStenoKey(SK_PL);
+    releaseStenoKey(SK_HL);
+    releaseAll();
+} else if (layer == 2){ // Send '^' symbol
+    pressScanCode(SC_L_SHIFT);
+    tapScanCode(SC_ODIA);
+    tapScanCode(SC_ODIA);
+    tapScanCode(SC_BACKSPACE);
+    releaseScanCode(SC_L_SHIFT);
 }}
-func onRelease24() { handleRelease(SC_L_CTRL, SK_NONE, SC_L_CTRL, SC_NONE, SC_L_CTRL); }
+func onRelease24() { handleRelease(SC_L_CTRL, SK_NONE, SK_NONE, SC_NONE, SC_L_CTRL); }
 
 func onPress25() { handlePress(SC_Z, SK_S2, SC_ODIA | SYM_ALTGR, SC_F1, SC_NONE); 
 if (layer == 2){
