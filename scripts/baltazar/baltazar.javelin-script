@@ -58,7 +58,7 @@
 //                  ,----------------------------.                               ,---------------------------.
 //                  |   2  |   3  |  4   |   5   |                              |   6   |   7  |   8  |   9  |
 //  ,-------+-------+------+------+------+-------|                              |-------+------+------+------+-------+-------.
-// |   §    |   1   |   "  |   #  |  =   |   %   |                              |   &   |  /   |  (   |   )  |   0   |   '   |
+// |   §    |   1   |   "  |   #  |  =   |   %   |                              |   &   |  /   |  (   |   )  |   0   |   ´   |
 // |--------+-------+------+------+------+-------|                              |-------+------+------+------+-------+-------|
 // |   Esc  |   !   |  @   |   +  |  {   |  }    |                              |   [   |  ]   |  <   |   >  |   ?   |   |   |
 // |--------+-------+------+------+------+-------'                              '-------+------+------+------+-------+-------'
@@ -75,11 +75,11 @@
 //                  ,----------------------------.                               ,---------------------------.
 //                  |  F1  |  F2  |  F3  |  F4   |                              | VolUp |BckSpc|Insert| Del  |
 //  ,-------+-------+------+------+------+-------|                              |-------+------+------+------+-------+-------.
-// |        |       |  F5  |  F6  |  F7  |  F8   |                              | VolDwn| HOME |  UP  | END  |  PgUp |   ´   | 
+// |        |       |  F5  |  F6  |  F7  |  F8   |                              | VolDwn| HOME |  UP  | END  | PgDwn | PgUp  | 
 // |--------+-------+------+------+------+-------|                              |-------+------+------+------+-------+-------|
-// |Shft/Esc|       |  F9  |  F10 |  F11 |  F12  |                              |  Mute | LEFT | DOWN | RIGHT|CtrlBsp|CtrlDel|
+// |Shft/Esc|       |  F9  |  F10 |  F11 |  F12  |                              |  Mute | LEFT | DOWN | RIGHT|CtrlBsp|   '   |
 // |--------+-------+------+------+------+-------'                              '-------+------+------+------+-------+-------'
-// |        |       |                                                                                        | PgDwn |   `   |
+// |        |       |                                                                                        |CtrlDel|   `   |
 // `----------------'                                                                                        '---------------'
 //                         ,------+------+------+------.               ,-----+------+------+------.  
 //                        |       |      |      |  SYM |              |  NAV |      |      |      | 
@@ -561,11 +561,11 @@ func onRelease8() { handleRelease(SC_I, SK_NUM8, SC_8, SC_NONE, SC_INSERT); }
 func onPress9() { handlePress(SC_O, SK_NUM9, SC_9, SC_NONE, SC_DELETE); }
 func onRelease9() { handleRelease(SC_O, SK_NUM9, SC_9, SC_NONE, SC_DELETE); }
 
-func onPress10() { handlePress(SC_P, SK_SR, SC_0, SC_NONE, SC_PAGE_UP); }
-func onRelease10() { handleRelease(SC_P, SK_SR, SC_0, SC_NONE, SC_PAGE_UP); }
+func onPress10() { handlePress(SC_P, SK_SR, SC_0, SC_NONE, SC_PAGE_DOWN); }
+func onRelease10() { handleRelease(SC_P, SK_SR, SC_0, SC_NONE, SC_PAGE_DOWN); }
 
-func onPress11() { handlePress(SC_ARNG, SK_ZR, SC_HASH_TILDE, SC_NONE, SC_EQUAL); }
-func onRelease11() { handleRelease(SC_ARNG, SK_ZR, SC_HASH_TILDE, SC_NONE, SC_EQUAL); }
+func onPress11() { handlePress(SC_ARNG, SK_ZR, SC_EQUAL, SC_NONE, SC_PAGE_UP); }
+func onRelease11() { handleRelease(SC_ARNG, SK_ZR, SC_EQUAL, SC_NONE, SC_PAGE_UP); }
 
 var timer12;
 func onPress12() {
@@ -621,13 +621,8 @@ if (layer == 8){
 }}
 func onRelease22() { handleRelease(SC_SEMICOLON, SK_TR, SC_HASH_TILDE, SC_L_META, SC_NONE); }
 
-func onPress23() { handlePress(SC_APOSTROPHE, SK_DR, SC_BACKSLASH_PIPE | SYM_ALTGR, SC_NONE, SC_NONE); 
-if (layer == 8){
-    pressScanCode(SC_L_CTRL);
-    tapScanCode(SC_DELETE);
-    releaseScanCode(SC_L_CTRL);
-}}
-func onRelease23() { handleRelease(SC_APOSTROPHE, SK_DR, SC_BACKSLASH_PIPE | SYM_ALTGR, SC_NONE, SC_NONE); }
+func onPress23() { handlePress(SC_APOSTROPHE, SK_DR, SC_BACKSLASH_PIPE | SYM_ALTGR, SC_NONE, SC_HASH_TILDE); }
+func onRelease23() { handleRelease(SC_APOSTROPHE, SK_DR, SC_BACKSLASH_PIPE | SYM_ALTGR, SC_NONE, SC_HASH_TILDE); }
 
 func onPress24() { handlePress(SC_L_CTRL, SK_NONE, SK_NONE, SC_NONE, SC_L_CTRL); 
 if (layer == 1){ // Sends stroke 'STPH' to suppress first space
@@ -688,8 +683,13 @@ func onRelease32() { handleRelease(SC_COMMA, SK_BR, SC_BACKSLASH_PIPE, SC_NONE, 
 func onPress33() { handlePress(SC_DOT, SK_GR, SC_BACKSLASH_PIPE | SYM_SHIFT, SC_NONE, SC_RIGHT); }
 func onRelease33() { handleRelease(SC_DOT, SK_GR, SC_BACKSLASH_PIPE | SYM_SHIFT, SC_NONE, SC_RIGHT); }
 
-func onPress34() { handlePress(SC_SLASH, SK_SR, SC_MINUS | SYM_ALTGR, SC_NONE, SC_PAGE_DOWN); }
-func onRelease34() { handleRelease(SC_SLASH, SK_SR, SC_MINUS | SYM_ALTGR, SC_NONE, SC_PAGE_DOWN); }
+func onPress34() { handlePress(SC_SLASH, SK_SR, SC_MINUS | SYM_ALTGR, SC_NONE, SC_NONE); 
+if (layer == 8){
+    pressScanCode(SC_L_CTRL);
+    tapScanCode(SC_DELETE);
+    releaseScanCode(SC_L_CTRL);
+}}
+func onRelease34() { handleRelease(SC_SLASH, SK_SR, SC_MINUS | SYM_ALTGR, SC_NONE, SC_NONE); }
 
 func onPress35() { handlePress(SC_R_SHIFT, SK_ZR, SC_HASH_TILDE | SYM_SHIFT, SC_NONE, SC_NONE); 
 if (layer == 8){
