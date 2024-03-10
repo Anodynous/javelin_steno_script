@@ -39,9 +39,9 @@
 //                  ,---------------------------.                               ,---------------------------.
 //                 |   #  |   #  |   #  |   #   |                              |  #    |   #  |   #  |   #  |
 //  ,-------+------+------+------+------+-------|                              |-------+------+------+------+------+--------.
-// |  Strk# |  #   |   T  |   P  |   H  |  *1   |                              |  *2   |   F  |   P  |   L  |   S  |    Z   |
+// |  Strk# |  Esc |   T  |   P  |   H  |  *1   |                              |  *2   |   F  |   P  |   L  |   S  |    Z   |
 // |--------+------+------+------+------+-------|                              |-------+------+------+------+------+--------|
-// |Shft/Esc|  S1  |   K  |   W  |   R  |  *3   |                              |  *4   |   R  |   B  |   G  |   T  |    D   |
+// |SupCapSp| S1/# |   K  |   W  |   R  |  *3   |                              |  *4   |   R  |   B  |   G  |   T  |    D   |
 // |--------+------+------+------+------+-------'                              '-------+------+------+------+------+--------'
 // |SupSpace|  S2  |                                                                                        |   S  |    Z   |
 // `---------------'                                                                                        '---------------'
@@ -530,8 +530,20 @@ func onPress0() { handlePress(SC_NONE, SK_NONE, SC_GRAVE, SC_NONE, SC_NONE);
 }
 func onRelease0() { handleRelease(SC_NONE, SK_NONE, SC_GRAVE, SC_NONE, SC_NONE); }
 
-func onPress1() { handlePress(SC_Q, SK_NUM1, SC_1, SC_F9, SC_NONE); }
-func onRelease1() { handleRelease(SC_Q, SK_NUM1, SC_1, SC_F9, SC_NONE); }
+func onPress1() { 
+  if (layer != 1) {
+  handlePress(SC_Q, SC_ESC | STENO_TO_SC, SC_1, SC_NONE, SC_NONE);   
+  } else if (layer == 1) {
+  handlePress(SC_ESC, SC_ESC | STENO_TO_SC, SC_1, SC_NONE, SC_NONE); 
+  }  
+}
+func onRelease1() {
+  if (layer != 1) { 
+    handleRelease(SC_Q, SC_ESC | STENO_TO_SC, SC_1, SC_NONE, SC_NONE); 
+  } else if (layer == 1) { 
+    handleRelease(SC_ESC, SC_ESC | STENO_TO_SC, SC_1, SC_NONE, SC_NONE); 
+  }
+}
 
 func onPress2() { handlePress(SC_W, SK_NUM2, SC_2, SC_NONE, SC_F1); }
 func onRelease2() { handleRelease(SC_W, SK_NUM2, SC_2, SC_NONE, SC_F1); }
@@ -569,20 +581,32 @@ func onRelease11() { handleRelease(SC_ARNG, SK_ZR, SC_EQUAL, SC_NONE, SC_PAGE_UP
 
 var timer12;
 func onPress12() {
-  handlePress(SC_L_SHIFT, SC_ESC | STENO_TO_SC, SC_L_SHIFT, SC_L_SHIFT, SC_L_SHIFT);
-  timer12 = getTime();
-  otherPressCount = 0;
+  if (layer != 1) {
+    handlePress(SC_L_SHIFT, SK_NONE, SC_L_SHIFT, SC_L_SHIFT, SC_L_SHIFT);
+    timer12 = getTime();
+    otherPressCount = 0;
+  } else if (layer == 1){ // Sends stroke 'KPA*' to suppress first space and capitalize next word
+    pressStenoKey(SK_KL);
+    pressStenoKey(SK_PL);
+    pressStenoKey(SK_A);
+    pressStenoKey(SK_STAR1);
+    releaseStenoKey(SK_KL);
+    releaseStenoKey(SK_PL);
+    releaseStenoKey(SK_A);
+    releaseStenoKey(SK_STAR1);
+    releaseAll();
+  }
 }
 func onRelease12() {
-  handleRelease(SC_L_SHIFT, SC_ESC | STENO_TO_SC, SC_L_SHIFT, SC_L_SHIFT, SC_L_SHIFT);
+  handleRelease(SC_L_SHIFT, SK_NONE, SC_L_SHIFT, SC_L_SHIFT, SC_L_SHIFT);
   if ((otherPressCount) == 0 && getTime() - timer12 < TAP_THRESHOLD) {
     otherPressCount = otherPressCount + 1;
     tapScanCode(SC_ESC);
   }
 }
 
-func onPress13() { handlePress(SC_A, SK_S1, SC_1 | SYM_SHIFT, SC_F5, SC_L_META); }
-func onRelease13() { handleRelease(SC_A, SK_S1, SC_1 | SYM_SHIFT, SC_F5, SC_L_META); }
+func onPress13() { handlePress(SC_A, SK_NUM1, SC_1 | SYM_SHIFT, SC_NONE, SC_L_META); }
+func onRelease13() { handleRelease(SC_A, SK_NUM1, SC_1 | SYM_SHIFT, SC_NONE, SC_L_META); }
 
 func onPress14() { handlePress(SC_S, SK_TL, SC_2 | SYM_SHIFT, SC_NONE, SC_F5); }
 func onRelease14() { handleRelease(SC_S, SK_TL, SC_2 | SYM_SHIFT, SC_NONE, SC_F5); }
@@ -604,22 +628,22 @@ func onRelease17() { handleRelease(SC_G, SK_STAR1, SC_5 | SYM_SHIFT, SC_NONE, SC
 func onPress18() { handlePress(SC_H, SK_STAR2, SC_6 | SYM_SHIFT, SC_NONE, SC_VOLUME_DOWN); }
 func onRelease18() { handleRelease(SC_H, SK_STAR2, SC_6 | SYM_SHIFT, SC_NONE, SC_VOLUME_DOWN); }
 
-func onPress19() { handlePress(SC_J, SK_FR, SC_7 | SYM_SHIFT, SC_L_SHIFT, SC_HOME); }
-func onRelease19() { handleRelease(SC_J, SK_FR, SC_7 | SYM_SHIFT, SC_L_SHIFT, SC_HOME); }
+func onPress19() { handlePress(SC_J, SK_FR, SC_7 | SYM_SHIFT, SC_NONE, SC_HOME); }
+func onRelease19() { handleRelease(SC_J, SK_FR, SC_7 | SYM_SHIFT, SC_NONE, SC_HOME); }
 
-func onPress20() { handlePress(SC_K, SK_PR, SC_8 | SYM_SHIFT, SC_L_CTRL, SC_UP); }
-func onRelease20() { handleRelease(SC_K, SK_PR, SC_8 | SYM_SHIFT, SC_L_CTRL, SC_UP); }
+func onPress20() { handlePress(SC_K, SK_PR, SC_8 | SYM_SHIFT, SC_NONE, SC_UP); }
+func onRelease20() { handleRelease(SC_K, SK_PR, SC_8 | SYM_SHIFT, SC_NONE, SC_UP); }
 
-func onPress21() { handlePress(SC_L, SK_LR, SC_9 | SYM_SHIFT, SC_L_ALT, SC_END); }
-func onRelease21() { handleRelease(SC_L, SK_LR, SC_9 | SYM_SHIFT, SC_L_ALT, SC_END); }
+func onPress21() { handlePress(SC_L, SK_LR, SC_9 | SYM_SHIFT, SC_NONE, SC_END); }
+func onRelease21() { handleRelease(SC_L, SK_LR, SC_9 | SYM_SHIFT, SC_NONE, SC_END); }
 
-func onPress22() { handlePress(SC_SEMICOLON, SK_TR, SC_HASH_TILDE, SC_L_META, SC_NONE); 
+func onPress22() { handlePress(SC_SEMICOLON, SK_TR, SC_HASH_TILDE, SC_NONE, SC_NONE); 
 if (layer == 8){
     pressScanCode(SC_L_CTRL);
     tapScanCode(SC_BACKSPACE);
     releaseScanCode(SC_L_CTRL);
 }}
-func onRelease22() { handleRelease(SC_SEMICOLON, SK_TR, SC_HASH_TILDE, SC_L_META, SC_NONE); }
+func onRelease22() { handleRelease(SC_SEMICOLON, SK_TR, SC_HASH_TILDE, SC_NONE, SC_NONE); }
 
 func onPress23() { handlePress(SC_APOSTROPHE, SK_DR, SC_BACKSLASH_PIPE | SYM_ALTGR, SC_NONE, SC_HASH_TILDE); }
 func onRelease23() { handleRelease(SC_APOSTROPHE, SK_DR, SC_BACKSLASH_PIPE | SYM_ALTGR, SC_NONE, SC_HASH_TILDE); }
@@ -644,7 +668,7 @@ if (layer == 1){ // Sends stroke 'STPH' to suppress first space
 }}
 func onRelease24() { handleRelease(SC_L_CTRL, SK_NONE, SK_NONE, SC_NONE, SC_L_CTRL); }
 
-func onPress25() { handlePress(SC_Z, SK_S2, SC_ODIA | SYM_ALTGR, SC_F1, SC_NONE); 
+func onPress25() { handlePress(SC_Z, SK_S2, SC_ODIA | SYM_ALTGR, SC_NONE, SC_NONE); 
 if (layer == 2){
     pressScanCode(SC_R_ALT);
     tapScanCode(SC_ODIA);
@@ -653,7 +677,7 @@ if (layer == 2){
     releaseScanCode(SC_R_ALT);
     tapScanCode(SC_BACKSPACE); // so need to remove second
 }}
-func onRelease25() { handleRelease(SC_Z, SK_S2, SC_ODIA | SYM_ALTGR, SC_F1, SC_NONE); }
+func onRelease25() { handleRelease(SC_Z, SK_S2, SC_ODIA | SYM_ALTGR, SC_NONE, SC_NONE); }
 
 func onPress26() { handlePress(SC_X, SK_KL, SC_2 | SYM_ALTGR, SC_NONE, SC_F9); }
 func onRelease26() { handleRelease(SC_X, SK_KL, SC_2 | SYM_ALTGR, SC_NONE, SC_F9); }
